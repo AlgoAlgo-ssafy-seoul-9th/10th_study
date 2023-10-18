@@ -525,6 +525,7 @@ print(''.join(zeroone))
 
 ```py
 # 20310 타노스
+# 31120 KB 44 ms python
 import sys
 
 input = sys.stdin.readline
