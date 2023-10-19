@@ -505,6 +505,50 @@ print(''.join(zeroone))
 
 ```py
 
+import copy
+from collections import deque
+
+S = list(input())
+cnt_1 = 0
+cnt_0 = 0
+for i in range(len(S)):
+    if S[i] == '1':
+        cnt_1 += 1
+    else:
+        cnt_0 += 1
+# 0 배치 먼저 하고 그다음 1 배치
+cnt_1 //= 2
+cnt_0 //= 2
+
+check_0 = 0
+check_1 = 0
+
+new_arr = copy.copy(S)
+del_arr = [0]*len(S)
+for i in range(len(S)):
+    if S[i] == '1' and check_1 < cnt_1:
+        del_arr[i] = 1
+        check_1 += 1
+    else:
+        pass
+    if i >= 1 and S[-i] == '0' and check_0 < cnt_0:
+        del_arr[-i] = 1
+        check_0 += 1
+    else:
+        pass
+# del_arr에서 1이면 삭제한다는거
+# print(del_arr)
+
+
+
+answer = ''
+for i in range(len(del_arr)):
+    if del_arr[i] == 0:
+        # print(new_arr[i])
+        answer += new_arr[i]
+# print(del_arr)
+print(answer)
+
 
 ```
 
@@ -531,7 +575,7 @@ for _ in range(zero):
     S.pop(-S[::-1].index("0")-1)
 for _ in range(one):
     S.pop(S.index("1"))
-    
+
 print("".join(S))
 
 
@@ -633,7 +677,34 @@ print(visited[-1])
 
 ```py
 
+import heapq
 
+
+def djk(graph,start):
+    INF = float('inf')
+    distance = [INF]*(n+1)
+    distance[start] = 0
+    q = [(distance[start],start)]
+    while q:
+        now_dist, now = heapq.heappop(q)
+        if now_dist > distance[now]: # 길면 볼필요없고 짧아야 볼건데,,
+            continue
+        for next, next_dist in graph[now]: # 그래프에서 꺼내서
+            dist = now_dist+next_dist
+            if dist < distance[next]:
+                distance[next] = dist
+                heapq.heappush(q,(dist,next))
+    return distance
+
+
+n,m = map(int,input().split())
+graph = [[] for _ in range(n+1)]
+for _ in range(m):
+    a,b,c = map(int,input().split())
+    graph[a].append((b,c))
+    graph[b].append((a,c))
+# print(graph)
+print(djk(graph,1)[-1])
 ```
 
 ## [서희](./택배배송/서희.py)
